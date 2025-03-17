@@ -59,19 +59,19 @@
                     <div class="field">
                         <label class="label">Precio:</label>
                         <div class="control">
-                            <input class="input" type="number" name="precio" placeholder="Precio">
+                            <input class="input" type="number" name="precio" placeholder="Precio" id="precio">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Descripción:</label>
                         <div class="control">
-                          <textarea class="textarea" name="desc" placeholder="Descripción" maxlength="55" style="resize: none"></textarea>
+                          <textarea class="textarea" name="desc" placeholder="Descripción" id="desc" maxlength="55" style="resize: none"></textarea>
                         </div>
                     </div>
               </section>
               <footer class="modal-card-foot" style="display: flex; justify-content: space-between">
                 <!-- <button class="button is-danger" id="btnCancelModal">Cancelar</button> -->
-                <button class="button is-success" type="submit">GUARDAR VENTA</button>
+                <button class="button is-success" type="submit" id="btnSubmit" disabled>COMPLETAR CAMPOS</button>
                 </form>
               </footer>
             </div>

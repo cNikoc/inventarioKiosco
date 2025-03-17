@@ -6,13 +6,11 @@ const formularioVentas = document.getElementById("formularioVentas");
 const ventasTable = document.getElementById("ventasTable");
 const Ntotal = document.getElementById("Ntotal");
 const fechaTitulo = document.getElementById("fechaTitulo");
-btnOpenModalVenta.addEventListener("click", () => {
-  modalVenta.classList.toggle("is-active");
-});
-btnCerrarModal.addEventListener("click", () => {
-  modalVenta.classList.toggle("is-active");
-});
+const btnSubmit = document.getElementById("btnSubmit");
+const inputPrecio = formularioVentas["precio"];
+const inputDescripcion = formularioVentas["desc"];
 
+// Configuración Firebase
 var firebaseConfig = {
   apiKey: "AIzaSyAbDa9RRhB5EZBK-z93flLE2PUI7ZgEm28",
   authDomain: "kioscoelmunie-19959.firebaseapp.com",
@@ -23,24 +21,23 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// Función para calcular total
 function calcularTotal(n) {
   const totalActual = parseFloat(Ntotal.textContent.replace(/,/g, "")) || 0;
   let totalFinal = totalActual + parseFloat(n);
   Ntotal.textContent = new Intl.NumberFormat("en-US").format(totalFinal);
-  return;
 }
 
+// Función para obtener la hora actual
 function horaInstante() {
   const now = new Date();
-  const hours = now.getHours(); // Obtiene la hora
-  const minutes = now.getMinutes(); // Obtiene los minutos
-  // Para mostrarlo en formato de dos dígitos (si es necesario)
-  const horaFormateada = `${hours.toString().padStart(2, "0")}:${minutes
+  return `${now.getHours().toString().padStart(2, "0")}:${now
+    .getMinutes()
     .toString()
     .padStart(2, "0")}`;
-  return horaFormateada;
 }
 
+// Obtener la fecha actual
 const fechaHoy = new Date().toLocaleDateString("es-ES", {
   weekday: "long",
   year: "numeric",
@@ -50,75 +47,89 @@ const fechaHoy = new Date().toLocaleDateString("es-ES", {
 const ventasRef = firebase.database().ref(`Ventas del ${fechaHoy}`);
 fechaTitulo.textContent = fechaHoy.toUpperCase();
 
+// Función para validar los campos del formulario
+function validarCampos() {
+  btnSubmit.disabled = !(inputPrecio.value.trim() !== "" && inputDescripcion.value.trim() !== "");
+  if (btnSubmit.disabled === true) btnSubmit.textContent = 'COMPLETAR CAMPOS'
+  else btnSubmit.textContent = 'GUARDAR VENTA'
+}
+
+// Agregar evento input para habilitar/deshabilitar el botón
+inputPrecio.addEventListener("input", validarCampos);
+inputDescripcion.addEventListener("input", validarCampos);
+
+// Deshabilitar el botón al abrir el modal
+btnOpenModalVenta.addEventListener("click", () => {
+  modalVenta.classList.toggle("is-active");
+  btnSubmit.disabled = true;
+});
+
+// También deshabilitar el botón al cerrar el modal
+btnCerrarModal.addEventListener("click", () => {
+  modalVenta.classList.toggle("is-active");
+  btnSubmit.disabled = true;
+  inputPrecio.value = "";
+  inputDescripcion.value = "";
+});
+
+// Evento de envío del formulario
 formularioVentas.addEventListener("submit", (e) => {
   e.preventDefault();
-  const precio = formularioVentas["precio"].value;
-  const descripcion = formularioVentas["desc"].value;
+  const precio = inputPrecio.value;
+  const descripcion = inputDescripcion.value;
 
-  // Usamos push para agregar una nueva venta sin reemplazar las anteriores
+  // Registrar la venta en Firebase
   const registrarVenta = ventasRef.push();
   registrarVenta.set({
-    Uid: registrarVenta.key, // Usamos la clave generada por push() como Uid
+    Uid: registrarVenta.key,
     precio: precio,
     descripcion: descripcion,
     hora: horaInstante(),
   });
 
-  // Limpiar los campos del formulario
-  formularioVentas["precio"].value = "";
-  formularioVentas["desc"].value = "";
+  // Limpiar el formulario y deshabilitar el botón nuevamente
+  inputPrecio.value = "";
+  inputDescripcion.value = "";
+  btnSubmit.disabled = true;
+
   // Cerrar el modal
   modalVenta.classList.toggle("is-active");
 });
 
+// Cargar ventas al iniciar
 window.addEventListener("DOMContentLoaded", async () => {
   await ventasRef.on("value", (snapshot) => {
-    ventasTable.innerHTML = ""; // Limpiar la tabla antes de actualizar
+    ventasTable.innerHTML = "";
     Ntotal.textContent = 0;
 
-    const venta = snapshot.val(); // Obtener los datos de ventas
-
-    // Asegúrate de que ventasData sea un objeto válido y tiene datos
+    const venta = snapshot.val();
     if (venta) {
-      // Iterar sobre cada venta
       Object.values(venta).forEach((venta, index) => {
         ventasTable.innerHTML += `
-            <tr>
-              <th>${index + 1}</th>
-              <td>${venta.descripcion.toUpperCase()}</td>
-              <td>$ ${venta.precio}</td>
-              <td>${venta.hora}</td>
-              <td>
-                <button class="button is-light is-small deletebtn" data-id="${
-                  venta.Uid
-                }" data-desc="${venta.descripcion.toUpperCase()} - $${
-          venta.precio
-        }">
+          <tr>
+            <th>${index + 1}</th>
+            <td>${venta.descripcion.toUpperCase()}</td>
+            <td>$ ${venta.precio}</td>
+            <td>${venta.hora}</td>
+            <td>
+              <button class="button is-light is-small deletebtn" data-id="${venta.Uid}" data-desc="${venta.descripcion.toUpperCase()} - $${venta.precio}">
                 ❌
-                </button>
-              </td>
-            </tr>
-          `;
+              </button>
+            </td>
+          </tr>
+        `;
 
         calcularTotal(venta.precio);
 
         // Asignar eventos a los botones de eliminación
         document.querySelectorAll(".deletebtn").forEach((btn) => {
           btn.addEventListener("click", async (e) => {
-            const confirmacion = confirm(
-              `Desea eliminar de la lista:  ${e.target.dataset.desc}`
-            );
+            const confirmacion = confirm(`Desea eliminar de la lista:  ${e.target.dataset.desc}`);
             if (confirmacion) {
-              /* alert("Eliminado de la lista"); */
-
-              // UID del ítem a eliminar
               const itemUID = e.target.dataset.id;
 
               try {
-                await firebase
-                  .database()
-                  .ref(`Ventas del ${fechaHoy}/${itemUID}`)
-                  .remove();
+                await firebase.database().ref(`Ventas del ${fechaHoy}/${itemUID}`).remove();
                 alert("✅ Ítem eliminado correctamente.");
                 e.target.closest("tr").remove();
               } catch (e) {
@@ -133,22 +144,20 @@ window.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
+// Descargar archivo con ventas
 btnDescarga.addEventListener("click", () => {
   let contenido = "";
   document.querySelectorAll("#ventasTable tr").forEach((row) => {
     let rowData = [];
     const cells = row.querySelectorAll("td, th");
-    // Excluir la última columna
     for (let i = 0; i < cells.length - 1; i++) {
       rowData.push(cells[i].innerText);
     }
-    contenido += rowData.join("\t") + "\n"; // Separado por tabulaciones
+    contenido += rowData.join("\t") + "\n";
   });
 
-  // Agregar "FIN" al final
   contenido += `\n-----\nTOTAL: $${Ntotal.textContent}.\n`;
 
-  // Crear archivo TXT y descargarlo
   const blob = new Blob([contenido], { type: "text/plain" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
