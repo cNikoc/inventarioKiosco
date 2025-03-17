@@ -1,0 +1,70 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;700&display=swap');
+
+:root {
+    --dark: #555;
+}
+
+body {
+    font-family: 'Comfortaa', cursive;
+    background: linear-gradient(to bottom, #3E8ED0, white);
+    /* background-image: url('./../kiosco.jpg'); */
+}
+
+.navbar {
+    background-color: #48C78E;
+    border-bottom: 3px solid #2221;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;          /* Lo coloca en la parte superior */
+    left: 0;         /* Alinea al lado izquierdo */
+    width: 100%;     /* Asegura que el navbar ocupe todo el ancho */
+}
+
+.navbar-item {
+    color: #111;
+    font-weight: bold;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 38px;
+    transition: .2s ease-in-out all;
+    height: 10vh;
+}
+
+.main-content {
+    margin-top: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.crud-container {
+    background:#fff;
+    width: 80%;
+    padding: 3rem 4rem;
+    overflow: auto;
+    box-shadow: 0 0 1rem 0 #999;
+    border-radius: .5rem;
+}
+
+.crud-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem 1rem 2rem; 
+    border-bottom: 1px solid #111;
+}
+
+.crud-container h1 {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+#Ntotal {
+    color: #27c980;
+    font-size:xx-large;
+    text-decoration: underline;
+}
+
+.separacionTotalBoton {
+    display: flex;
+    justify-content: space-between;
+}

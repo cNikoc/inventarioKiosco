@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/1888/1888859.png">
+    <link rel="stylesheet" href="./styles/main.css">
+    <title>Kiosco "EL MUÑE"</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Logo_River_Plate.png" alt="river" width="60px" height="auto" style="margin-left: 15px;">
+              <h1 class="navbar-item">
+                Kiosco "EL MUÑE"
+              </h1>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Escudo_del_Club_Atl%C3%A9tico_Independiente.svg/1945px-Escudo_del_Club_Atl%C3%A9tico_Independiente.svg.png" alt="ind" width="70px" height="auto" style="margin-left: 5px;">
+              <img src="https://services.meteored.com/img/article/argentina-origen-significado-nombre-pais-rio-plata-argentum-latin-1702368462277_512.jpeg" alt="arg" width="110px" height="auto" style="margin-left: 620px;">
+            </div>
+          </nav>
+          <main class="main-content">
+            <div class="crud-container">
+                <div class="crud-header">
+                    <h1>Ventas del <b id="fechaTitulo"></b></h1>
+                </div>
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Hora</th>
+                        <th>BORRAR</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ventasTable">
+                    </tbody>
+                  </table>
+                  <div class="separacionTotalBoton">
+                    <h1>Total:   $ <b id="Ntotal"></b> .</h1>
+                    <button class="button is-success" id="btnOpenModalVenta">➕ Agregar Nueva VENTA</button>
+                  </div>
+                  <hr>
+                  <button class="button is-info" id="btnDescarga">▼ DESCARGAR DATOS</button>
+            </div>
+          </main>
+          <hr><hr><hr>
+          <div class="modal" id="modalVenta">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">➕ Agregar Nueva VENTA</p>
+                <button class="delete" aria-label="close" id="btnCerrarModal"></button>
+              </header>
+              <section class="modal-card-body">
+                <form id="formularioVentas">
+                    <div class="field">
+                        <label class="label">Precio:</label>
+                        <div class="control">
+                            <input class="input" type="number" name="precio" placeholder="Precio">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Descripción:</label>
+                        <div class="control">
+                          <textarea class="textarea" name="desc" placeholder="Descripción" maxlength="55" style="resize: none;"></textarea>
+                        </div>
+                    </div>
+              </section>
+              <footer class="modal-card-foot" style="display: flex; justify-content: space-between">
+                <!-- <button class="button is-danger" id="btnCancelModal">Cancelar</button> -->
+                <button class="button is-success" type="submit">Guardar Venta</button>
+                </form>
+              </footer>
+            </div>
+          </div>
+        </header>
+      <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+      <script src="./js/app.js" type="module"></script>
+</body>
+</html>
