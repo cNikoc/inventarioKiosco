@@ -40,10 +40,10 @@
                   </table>
                   <div class="separacionTotalBoton">
                     <h1>Total:   $ <b id="Ntotal"></b> .</h1>
-                    <button class="button is-success" id="btnOpenModalVenta">➕ Agregar Nueva VENTA</button>
+                    <button class="button is-success" id="btnOpenModalVenta" style="background:orangered">✚ AGREGAR NUEVA VENTA</button>
                   </div>
                   <hr>
-                  <button class="button is-info" id="btnDescarga">▼ DESCARGAR DATOS</button>
+                  <button class="button is-info is-small" id="btnDescarga">▼ DESCARGAR DATOS</button>
             </div>
           </main>
           <hr><hr><hr>
@@ -51,7 +51,7 @@
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">➕ Agregar Nueva VENTA</p>
+                <p class="modal-card-title">✚ Agregar Nueva Venta</p>
                 <button class="delete" aria-label="close" id="btnCerrarModal"></button>
               </header>
               <section class="modal-card-body">
@@ -65,13 +65,13 @@
                     <div class="field">
                         <label class="label">Descripción:</label>
                         <div class="control">
-                          <textarea class="textarea" name="desc" placeholder="Descripción" maxlength="55" style="resize: none;"></textarea>
+                          <textarea class="textarea" name="desc" placeholder="Descripción" maxlength="55" style="resize: none"></textarea>
                         </div>
                     </div>
               </section>
               <footer class="modal-card-foot" style="display: flex; justify-content: space-between">
                 <!-- <button class="button is-danger" id="btnCancelModal">Cancelar</button> -->
-                <button class="button is-success" type="submit">Guardar Venta</button>
+                <button class="button is-success" type="submit">GUARDAR VENTA</button>
                 </form>
               </footer>
             </div>
