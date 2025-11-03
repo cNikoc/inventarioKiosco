@@ -17,21 +17,36 @@
                 Kiosco "EL MUÑE"
               </h1>
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Escudo_del_Club_Atl%C3%A9tico_Independiente.svg/1945px-Escudo_del_Club_Atl%C3%A9tico_Independiente.svg.png" alt="ind" width="70px" height="auto" style="margin-left: 5px;">
-              <img src="https://services.meteored.com/img/article/argentina-origen-significado-nombre-pais-rio-plata-argentum-latin-1702368462277_512.jpeg" alt="arg" width="110px" height="auto" style="margin-left: 620px;">
+              <div style="margin-left: 600px; display: flex; align-items: center; gap: 10px;">
+                <div id="relojDigital" class="reloj-digital">
+                  <div class="reloj-etiqueta">RELOJ</div>
+                  <div class="reloj-hora">00:00:00</div>
+                  <div class="reloj-fecha">---</div>
+                </div>
+                <img src="https://services.meteored.com/img/article/argentina-origen-significado-nombre-pais-rio-plata-argentum-latin-1702368462277_512.jpeg" alt="arg" width="110px" height="auto">
+              </div>
             </div>
           </nav>
           <main class="main-content">
             <div class="crud-container">
                 <div class="crud-header">
                     <h1>Ventas del <b id="fechaTitulo"></b></h1>
+                    <div class="turno-selector">
+                      <div class="buttons has-addons">
+                        <button class="button is-success is-small" id="btnTurnoManiana">MAÑANA</button>
+                        <button class="button is-warning is-small" id="btnTurnoTarde">TARDE</button>
+                        <button class="button is-dark is-small" id="btnTurnoNoche">NOCHE</button>
+                      </div>
+                    </div>
                 </div>
-                <table class="table">
+                  <table class="table">
                     <thead>
                       <tr>
                         <th>#</th>
                         <th>Descripción</th>
                         <th>Precio</th>
                         <th>Hora</th>
+                        <th>Turno</th>
                         <th>BORRAR</th>
                       </tr>
                     </thead>
@@ -39,9 +54,10 @@
                     </tbody>
                   </table>
                   <div class="separacionTotalBoton">
-                    <h1>Total:   $ <b id="Ntotal"></b> .</h1>
-                    <button class="button is-success" id="btnOpenModalVenta" style="background:orangered">✚ AGREGAR NUEVA VENTA</button>
+                    <h1>Total de hoy:   $ <b id="Ntotal"></b> .</h1>
+                    <button class="button is-success" id="btnOpenModalVenta" style="background:#43C429; font-size: 16px; padding: 12px 24px;">✚ AGREGAR NUEVA VENTA</button>
                   </div>
+                  <div id="turnosDividers"></div>
                   <hr>
                   <button class="button is-info is-small" id="btnDescarga">▼ DESCARGAR DATOS</button>
             </div>
@@ -68,6 +84,11 @@
                           <textarea class="textarea" name="desc" placeholder="Descripción" id="desc" maxlength="55" style="resize: none"></textarea>
                         </div>
                     </div>
+                    <div class="field" style="margin-top: 1rem;">
+                        <button type="button" class="button is-info is-light is-fullwidth" id="btnMasVendidos">
+                            ⭐ MÁS VENDIDOS
+                        </button>
+                    </div>
               </section>
               <footer class="modal-card-foot" style="display: flex; justify-content: space-between">
                 <!-- <button class="button is-danger" id="btnCancelModal">Cancelar</button> -->
@@ -76,9 +97,72 @@
               </footer>
             </div>
           </div>
+
+          <!-- Modal de Más Vendidos -->
+          <div class="modal" id="modalMasVendidos">
+            <div class="modal-background"></div>
+            <div class="modal-card" style="max-width: 90%; width: 90%;">
+              <header class="modal-card-head">
+                <p class="modal-card-title">⭐ Productos Más Vendidos</p>
+                <button class="delete" aria-label="close" id="btnCerrarMasVendidos"></button>
+              </header>
+              <section class="modal-card-body">
+                <div id="listaMasVendidos" class="productos-grid" style="max-height: 60vh; overflow-y: auto;">
+                  <div class="notification is-light has-text-centered">
+                    Cargando productos más vendidos...
+                  </div>
+                </div>
+              </section>
+              <footer class="modal-card-foot" style="justify-content: space-between;">
+                <button class="button is-success" id="btnAgregarProducto">➕ Agregar Producto</button>
+                <button class="button" id="btnCancelarMasVendidos">Cerrar</button>
+              </footer>
+            </div>
+          </div>
+
+          <!-- Modal para Agregar Producto Favorito -->
+          <div class="modal" id="modalAgregarProducto">
+            <div class="modal-background"></div>
+            <div class="modal-card" style="max-width: 400px;">
+              <header class="modal-card-head">
+                <p class="modal-card-title">➕ Agregar Producto Favorito</p>
+                <button class="delete" aria-label="close" id="btnCerrarAgregarProducto"></button>
+              </header>
+              <section class="modal-card-body">
+                <form id="formularioProducto">
+                  <div class="field">
+                    <label class="label">Descripción:</label>
+                    <div class="control">
+                      <input class="input" type="text" name="desc" placeholder="Ej: Coca Cola 1.5L" id="prodDesc" maxlength="55">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Precio:</label>
+                    <div class="control">
+                      <input class="input" type="number" name="precio" placeholder="Precio" id="prodPrecio" step="0.01" min="0">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">URL de Imagen (opcional):</label>
+                    <div class="control">
+                      <input class="input" type="url" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg" id="prodImagenUrl">
+                    </div>
+                  </div>
+                </form>
+              </section>
+              <footer class="modal-card-foot" style="display: flex; justify-content: flex-end;">
+                <button class="button is-success" type="button" id="btnGuardarProducto">Guardar</button>
+              </footer>
+            </div>
+          </div>
         </header>
       <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
-      <script src="./js/app.js" type="module"></script>
+      <script src="./js/config.js"></script>
+      <script src="./js/utils.js"></script>
+      <script src="./js/notifications.js"></script>
+      <script src="./js/firebaseService.js"></script>
+      <script src="./js/ui.js"></script>
+      <script src="./js/app.js"></script>
 </body>
 </html>
